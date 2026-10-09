@@ -36,8 +36,12 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/health")
-    public ResponseEntity<?> health() {
-        return ResponseEntity.ok(Map.of("status", "OK", "service", "AI Crop Advisory Platform"));
+    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationExceptions(org.springframework.web.bind.MethodArgumentNotValidException ex) {
+        String errorMsg = ex.getBindingResult().getFieldErrors().stream()
+            .map(err -> err.getDefaultMessage())
+            .findFirst()
+            .orElse("Invalid input data");
+        return ResponseEntity.badRequest().body(Map.of("message", errorMsg, "error", errorMsg));
     }
 }

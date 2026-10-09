@@ -41,13 +41,18 @@ public class AuthService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already registered");
+
+        String finalEmail = (request.getEmail() != null && !request.getEmail().trim().isEmpty())
+            ? request.getEmail().trim()
+            : request.getUsername().toLowerCase().replaceAll("[^a-z0-9]", "") + "@farmer.krishimitra.in";
+
+        if (userRepository.existsByEmail(finalEmail)) {
+            finalEmail = request.getUsername().toLowerCase().replaceAll("[^a-z0-9]", "") + "_" + System.currentTimeMillis() + "@farmer.krishimitra.in";
         }
 
         User user = User.builder()
             .username(request.getUsername())
-            .email(request.getEmail())
+            .email(finalEmail)
             .password(passwordEncoder.encode(request.getPassword()))
             .fullName(request.getFullName())
             .phone(request.getPhone())
