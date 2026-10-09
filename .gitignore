@@ -1,0 +1,27 @@
+# Maven build artifacts
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Sensitive local config
+local.properties
+application-local.properties
+.env
+
+# Eclipse / IntelliJ / VS Code
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Logs & OS
+*.log
+logs/
+.DS_Store
+Thumbs.db
